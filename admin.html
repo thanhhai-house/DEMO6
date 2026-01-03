@@ -1,98 +1,143 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Admin</title>
   <style>
-    :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;}
+    :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;--danger:#d93025;--ok:#137333;}
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui;background:linear-gradient(180deg,var(--soft),#fff 45%);color:#202124}
-    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
     .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
-    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--b),#4fc3f7)}
-    nav a{color:var(--b2);font-weight:800;text-decoration:none;margin-right:10px}
+    .hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+    .hdr-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .brand{display:flex;gap:12px;align-items:center}
+    .truck{width:56px;height:56px;border-radius:16px;border:1px solid #d2e3fc;background:linear-gradient(135deg,#fff,#e8f0fe);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 22px rgba(26,115,232,.18)}
+    .title{font-weight:900}
+    .sub{font-size:12px;color:var(--muted)}
+    .nav a{color:var(--b2);font-weight:900;text-decoration:none;margin-right:12px}
+    .nav a.on{text-decoration:underline}
+    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#e8f0fe;color:var(--b2);border:1px solid #d2e3fc;font-weight:900}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     @media(max-width:860px){.grid{grid-template-columns:1fr}}
     .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.04);overflow:hidden}
-    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px}
+    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px;display:flex;justify-content:space-between;align-items:center}
     .content{padding:14px 16px}
     label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
     input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px}
-    button{margin-top:10px;border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:900;background:linear-gradient(135deg,var(--b),var(--b2));color:#fff}
-    ul{padding-left:18px;margin:8px 0}
+    input:focus{border-color:#bcd3ff;box-shadow:0 0 0 4px rgba(26,115,232,.12)}
+    button{border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:900}
+    .primary{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;box-shadow:0 10px 22px rgba(26,115,232,.24)}
+    .danger{background:#fff;color:var(--danger);border:1px solid #f6c7c3}
+    .row{display:grid;grid-template-columns:1fr .6fr;gap:10px}
+    .list{margin-top:10px}
+    .item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
     .tiny{font-size:12px;color:var(--muted)}
+    .status{display:none;margin-top:10px;font-size:13px;padding:10px 12px;border-radius:12px;border:1px solid var(--line)}
+    .status.ok{display:block;border-color:#c7e7d1;background:#f2fff6;color:var(--ok)}
+    .status.err{display:block;border-color:#f6c7c3;background:#fff5f5;color:var(--danger)}
+    .footer{padding:18px 16px 26px;display:flex;justify-content:center}
+    .footer-pill{width:min(980px, calc(100% - 16px));border-radius:999px;padding:10px 14px;border:1px solid #d2e3fc;background:linear-gradient(135deg,#a7f3d0 0%,#93c5fd 35%,#e8f0fe 70%,#fff 100%);box-shadow:0 10px 26px rgba(26,115,232,.12);overflow:hidden}
+    .marquee{overflow:hidden;white-space:nowrap}
+    .marquee__inner{display:inline-flex;gap:32px;align-items:center;animation:marquee 14s linear infinite}
+    .marquee__inner span{color:#fff;font-weight:900;letter-spacing:.4px;text-shadow:0 2px 10px rgba(0,0,0,.18)}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <div style="font-weight:900">Admin</div>
-          <div class="tiny">Quản lý danh mục & nhà cung cấp</div>
-          <nav style="margin-top:6px">
-            <a href="./index.html">Nhập hàng</a>
-            <a href="./product.html">Sản phẩm</a>
-            <a href="./admin.html">Admin</a>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+<div id="hdr"></div>
 
 <div class="wrap">
   <div class="grid">
     <div class="card">
-      <h2>Nhóm hàng (Categories)</h2>
+      <h2><span>Nhóm hàng</span><span class="pill" id="catCount">0</span></h2>
       <div class="content">
-        <label>Thêm nhóm mới</label>
-        <input id="newCat" placeholder="VD: LỌC DẦU" />
-        <button id="addCat">Thêm</button>
-        <div class="tiny" style="margin-top:10px">Danh sách:</div>
-        <ul id="catList"></ul>
+        <label>Thêm nhóm</label>
+        <div class="row">
+          <input id="newCat" placeholder="VD: LỌC DẦU / BUGI / ...">
+          <button class="primary" id="addCat">Thêm</button>
+        </div>
+        <div class="list" id="catList"></div>
       </div>
     </div>
 
     <div class="card">
-      <h2>Nhà cung cấp (Suppliers)</h2>
+      <h2><span>Nhà cung cấp</span><span class="pill" id="supCount">0</span></h2>
       <div class="content">
-        <label>Thêm NCC mới</label>
-        <input id="newSup" placeholder="VD: NCC A" />
-        <button id="addSup">Thêm</button>
-        <div class="tiny" style="margin-top:10px">Danh sách:</div>
-        <ul id="supList"></ul>
+        <label>Thêm NCC</label>
+        <div class="row">
+          <input id="newSup" placeholder="VD: NCC A">
+          <button class="primary" id="addSup">Thêm</button>
+        </div>
+        <div class="list" id="supList"></div>
       </div>
     </div>
   </div>
+
+  <div id="status" class="status" style="margin-top:12px"></div>
+  <div class="tiny" style="margin-top:8px">
+    Gợi ý: nếu tên nhóm bắt đầu bằng <b>LỌC</b> thì hệ thống tự dùng <b>OEM</b>.
+  </div>
 </div>
 
+<div id="ftr"></div>
+
 <script type="module">
-  import { jsonp, postViaIframe } from "./app.js";
-  const $ = (id)=>document.getElementById(id);
+  import { jsonp, postViaIframe, uiHeader, uiFooter } from "./app.js";
+  const $=(id)=>document.getElementById(id);
+
+  $('hdr').innerHTML = uiHeader('admin');
+  $('ftr').innerHTML = uiFooter();
+
+  function setStatus(type,msg){
+    const box=$('status');
+    box.className='status '+(type==='ok'?'ok':'err');
+    box.textContent=msg;
+  }
+
+  function renderList(container, arr, delMode){
+    container.innerHTML='';
+    (arr||[]).forEach(v=>{
+      const div=document.createElement('div');
+      div.className='item';
+      div.innerHTML = `<div>${v}</div><button class="danger">Xoá</button>`;
+      div.querySelector('button').onclick = async ()=>{
+        const res = await postViaIframe({ action:'admin_post', mode:delMode, value:v });
+        if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
+        setStatus('ok', res.message);
+        refresh();
+      };
+      container.appendChild(div);
+    });
+  }
 
   async function refresh(){
     const res = await jsonp('admin_get');
-    $('catList').innerHTML = (res.categories||[]).map(x=>`<li>${x}</li>`).join('');
-    $('supList').innerHTML = (res.suppliers||[]).map(x=>`<li>${x}</li>`).join('');
+    const cats = res.categories||[];
+    const sups = res.suppliers||[];
+    $('catCount').textContent = String(cats.length);
+    $('supCount').textContent = String(sups.length);
+    renderList($('catList'), cats, 'delete_category');
+    renderList($('supList'), sups, 'delete_supplier');
   }
 
-  // Hack nhanh: dùng upsertInbound để "tự seed" Suppliers/Categories không hợp lý.
-  // => Mình giữ admin minimal ở đây: bạn muốn chuẩn thì mình sẽ thêm endpoint admin_post riêng.
-  // Để khỏi dài: hiện tại chỉ hiển thị list. Nếu bạn cần add/edit thật sự, nói "thêm endpoint admin" là mình đưa ngay.
+  $('addCat').onclick = async ()=>{
+    const v=$('newCat').value.trim();
+    const res = await postViaIframe({ action:'admin_post', mode:'add_category', value:v });
+    if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
+    setStatus('ok', res.message);
+    $('newCat').value='';
+    refresh();
+  };
 
-  $('addCat').addEventListener('click', async ()=>{
-    alert('Để thêm/sửa Categories/Suppliers chuẩn, mình sẽ thêm endpoint admin_post trong backend. Bạn nhắn: "thêm endpoint admin" là mình gửi full patch code.');
-  });
-
-  $('addSup').addEventListener('click', async ()=>{
-    alert('Để thêm/sửa Categories/Suppliers chuẩn, mình sẽ thêm endpoint admin_post trong backend. Bạn nhắn: "thêm endpoint admin" là mình gửi full patch code.');
-  });
+  $('addSup').onclick = async ()=>{
+    const v=$('newSup').value.trim();
+    const res = await postViaIframe({ action:'admin_post', mode:'add_supplier', value:v });
+    if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
+    setStatus('ok', res.message);
+    $('newSup').value='';
+    refresh();
+  };
 
   refresh();
 </script>
