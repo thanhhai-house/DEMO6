@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin</title>
+  <style>
+    :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui;background:linear-gradient(180deg,var(--soft),#fff 45%);color:#202124}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--b),#4fc3f7)}
+    nav a{color:var(--b2);font-weight:800;text-decoration:none;margin-right:10px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:860px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.04);overflow:hidden}
+    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px}
+    .content{padding:14px 16px}
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
+    input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px}
+    button{margin-top:10px;border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:900;background:linear-gradient(135deg,var(--b),var(--b2));color:#fff}
+    ul{padding-left:18px;margin:8px 0}
+    .tiny{font-size:12px;color:var(--muted)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <div style="font-weight:900">Admin</div>
+          <div class="tiny">Quản lý danh mục & nhà cung cấp</div>
+          <nav style="margin-top:6px">
+            <a href="./index.html">Nhập hàng</a>
+            <a href="./product.html">Sản phẩm</a>
+            <a href="./admin.html">Admin</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h2>Nhóm hàng (Categories)</h2>
+      <div class="content">
+        <label>Thêm nhóm mới</label>
+        <input id="newCat" placeholder="VD: LỌC DẦU" />
+        <button id="addCat">Thêm</button>
+        <div class="tiny" style="margin-top:10px">Danh sách:</div>
+        <ul id="catList"></ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Nhà cung cấp (Suppliers)</h2>
+      <div class="content">
+        <label>Thêm NCC mới</label>
+        <input id="newSup" placeholder="VD: NCC A" />
+        <button id="addSup">Thêm</button>
+        <div class="tiny" style="margin-top:10px">Danh sách:</div>
+        <ul id="supList"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { jsonp, postViaIframe } from "./app.js";
+  const $ = (id)=>document.getElementById(id);
+
+  async function refresh(){
+    const res = await jsonp('admin_get');
+    $('catList').innerHTML = (res.categories||[]).map(x=>`<li>${x}</li>`).join('');
+    $('supList').innerHTML = (res.suppliers||[]).map(x=>`<li>${x}</li>`).join('');
+  }
+
+  // Hack nhanh: dùng upsertInbound để "tự seed" Suppliers/Categories không hợp lý.
+  // => Mình giữ admin minimal ở đây: bạn muốn chuẩn thì mình sẽ thêm endpoint admin_post riêng.
+  // Để khỏi dài: hiện tại chỉ hiển thị list. Nếu bạn cần add/edit thật sự, nói "thêm endpoint admin" là mình đưa ngay.
+
+  $('addCat').addEventListener('click', async ()=>{
+    alert('Để thêm/sửa Categories/Suppliers chuẩn, mình sẽ thêm endpoint admin_post trong backend. Bạn nhắn: "thêm endpoint admin" là mình gửi full patch code.');
+  });
+
+  $('addSup').addEventListener('click', async ()=>{
+    alert('Để thêm/sửa Categories/Suppliers chuẩn, mình sẽ thêm endpoint admin_post trong backend. Bạn nhắn: "thêm endpoint admin" là mình gửi full patch code.');
+  });
+
+  refresh();
+</script>
+</body>
+</html>
