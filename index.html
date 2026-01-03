@@ -8,6 +8,8 @@
     :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;--danger:#d93025;--ok:#137333;}
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui;background:linear-gradient(180deg,var(--soft),#fff 45%);color:#202124}
+    .page{min-height:100vh;display:flex;flex-direction:column}
+    .main{flex:1}
     .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
     .hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
     .hdr-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
@@ -48,161 +50,197 @@
     .thumb{width:74px;height:74px;border-radius:14px;border:1px solid var(--line);overflow:hidden;position:relative;background:#fff}
     .thumb img{width:100%;height:100%;object-fit:cover}
     .thumb .x{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
-    .footer{padding:18px 16px 26px;display:flex;justify-content:center}
-    .footer-pill{width:min(980px, calc(100% - 16px));border-radius:999px;padding:10px 14px;border:1px solid #d2e3fc;background:linear-gradient(135deg,#a7f3d0 0%,#93c5fd 35%,#e8f0fe 70%,#fff 100%);box-shadow:0 10px 26px rgba(26,115,232,.12);overflow:hidden}
+    .footer{padding:12px 16px 16px;display:flex;justify-content:center}
+    .footer-pill{width:min(980px, calc(100% - 16px));border-radius:999px;padding:10px 14px;border:1px solid #d2e3fc;background:#ffffff;box-shadow:0 10px 26px rgba(26,115,232,.10);overflow:hidden}
     .marquee{overflow:hidden;white-space:nowrap}
     .marquee__inner{display:inline-flex;gap:32px;align-items:center;animation:marquee 14s linear infinite}
-    .marquee__inner span{color:#fff;font-weight:900;letter-spacing:.4px;text-shadow:0 2px 10px rgba(0,0,0,.18)}
+    .marquee__inner span{color:#93c5fd;font-weight:900;letter-spacing:.4px}
     @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
   </style>
 </head>
 <body>
-<div id="hdr"></div>
+<div class="page">
+  <div id="hdr"></div>
 
-<div class="wrap">
-  <div class="tabs">
-    <button class="tab on" id="tAdd">Thêm sản phẩm</button>
-    <button class="tab" id="tIn">Nhập hàng</button>
-    <button class="tab" id="tOut">Bán hàng</button>
-  </div>
+  <div class="main">
+    <div class="wrap">
+      <div class="tabs">
+        <button class="tab on" id="tAdd">Thêm sản phẩm</button>
+        <button class="tab" id="tIn">Nhập hàng</button>
+        <button class="tab" id="tOut">Bán hàng</button>
+      </div>
 
-  <div class="grid" style="margin-top:12px">
-    <div class="card">
-      <h2><span id="formTitle">Thêm sản phẩm</span><span class="pill" id="badgeType">SKU</span></h2>
-      <div class="content">
-        <div class="row">
-          <div>
-            <label>Nhóm hàng *</label>
-            <select id="category"></select>
-          </div>
-          <div>
-            <label>Loại mã</label>
-            <input id="code_type" disabled value="SKU">
+      <div class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2><span id="formTitle">Thêm sản phẩm</span><span class="pill" id="badgeType">SKU</span></h2>
+          <div class="content">
+            <div class="row">
+              <div>
+                <label>Nhóm hàng *</label>
+                <select id="category"></select>
+              </div>
+              <div>
+                <label>Loại mã</label>
+                <input id="code_type" disabled value="SKU">
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label id="labelMain">SKU *</label>
+                <input id="code_main" placeholder="VD: C85180 / SKU123">
+                <div class="tiny" id="hint"></div>
+              </div>
+              <div>
+                <label id="labelAlt">Mã thay thế</label>
+                <input id="code_alt" placeholder="cách nhau dấu phẩy ,">
+              </div>
+            </div>
+
+            <!-- Add Product (now includes fields like inbound) -->
+            <div id="addOnly">
+              <div class="row">
+                <div>
+                  <label>Tên sản phẩm *</label>
+                  <input id="name" placeholder="VD: Lọc nhớt ...">
+                </div>
+                <div>
+                  <label>Hãng / dòng</label>
+                  <input id="brand_model">
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Đơn vị</label>
+                  <input id="unit">
+                </div>
+                <div>
+                  <label>Vị trí kệ</label>
+                  <input id="shelf">
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Giá nhập</label>
+                  <input id="cost_price" type="number">
+                </div>
+                <div>
+                  <label>Giá bán</label>
+                  <input id="sale_price" type="number">
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Số lượng nhập ban đầu (tuỳ chọn)</label>
+                  <input id="add_qty" type="number" placeholder="Nếu nhập > 0 sẽ cộng tồn và ghi lịch sử nhập">
+                </div>
+                <div>
+                  <label>Nhà cung cấp</label>
+                  <input id="add_supplier" list="supList">
+                </div>
+              </div>
+
+              <label>Ghi chú</label>
+              <textarea id="add_note"></textarea>
+
+              <label>Ảnh sản phẩm (lưu Drive)</label>
+              <input id="add_images" type="file" accept="image/*" multiple>
+              <div class="preview" id="add_preview"></div>
+            </div>
+
+            <!-- Inbound -->
+            <div id="inOnly" style="display:none">
+              <div class="row">
+                <div>
+                  <label>Số lượng nhập *</label>
+                  <input id="in_qty" type="number">
+                </div>
+                <div>
+                  <label>Giá nhập (cập nhật theo mã)</label>
+                  <input id="in_cost" type="number">
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <label>Giá bán (cập nhật theo mã)</label>
+                  <input id="in_sale" type="number">
+                </div>
+                <div>
+                  <label>Nhà cung cấp</label>
+                  <input id="supplier" list="supList">
+                </div>
+              </div>
+              <label>Ghi chú</label>
+              <textarea id="in_note"></textarea>
+
+              <label>Ảnh nhập (lưu Drive)</label>
+              <input id="images" type="file" accept="image/*" multiple>
+              <div class="preview" id="preview"></div>
+            </div>
+
+            <!-- Sales -->
+            <div id="outOnly" style="display:none">
+              <div class="row">
+                <div>
+                  <label>Số lượng bán *</label>
+                  <input id="out_qty" type="number">
+                </div>
+                <div>
+                  <label>Giá bán (tuỳ chọn cập nhật)</label>
+                  <input id="out_price" type="number">
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <label>Khách hàng</label>
+                  <input id="customer">
+                </div>
+                <div></div>
+              </div>
+              <label>Ghi chú</label>
+              <textarea id="out_note"></textarea>
+            </div>
+
+            <datalist id="supList"></datalist>
+
+            <div class="btns">
+              <button class="primary" id="btnSave">Lưu</button>
+              <button class="ghost" id="btnClear">Xoá form</button>
+            </div>
+
+            <div id="status" class="status"></div>
           </div>
         </div>
 
-        <div class="row">
-          <div>
-            <label id="labelMain">SKU *</label>
-            <input id="code_main" placeholder="VD: C85180 / SKU123">
-            <div class="tiny" id="hint"></div>
-          </div>
-          <div id="altWrap">
-            <label id="labelAlt">Mã thay thế</label>
-            <input id="code_alt" placeholder="cách nhau dấu phẩy ,">
+        <div class="card">
+          <h2><span id="rightTitle">Lịch sử</span><span class="pill" id="rightCount">0</span></h2>
+          <div class="content" style="overflow:auto">
+            <table>
+              <thead id="thead"></thead>
+              <tbody id="tbody"><tr><td class="tiny">Chưa có dữ liệu</td></tr></tbody>
+            </table>
           </div>
         </div>
-
-        <div id="addOnly">
-          <div class="row">
-            <div>
-              <label>Tên sản phẩm *</label>
-              <input id="name" placeholder="VD: LỌC NHỚT ...">
-            </div>
-            <div>
-              <label>Hãng / dòng</label>
-              <input id="brand_model" placeholder="VD: Yanmar, Toyota...">
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Đơn vị</label>
-              <input id="unit" placeholder="VD: cái / bộ">
-            </div>
-            <div>
-              <label>Vị trí kệ</label>
-              <input id="shelf" placeholder="VD: A3">
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Giá nhập</label>
-              <input id="cost_price" type="number">
-            </div>
-            <div>
-              <label>Giá bán</label>
-              <input id="sale_price" type="number">
-            </div>
-          </div>
-        </div>
-
-        <div id="inOnly" style="display:none">
-          <div class="row">
-            <div>
-              <label>Số lượng nhập *</label>
-              <input id="in_qty" type="number">
-            </div>
-            <div>
-              <label>Nhà cung cấp</label>
-              <input id="supplier" list="supList">
-              <datalist id="supList"></datalist>
-            </div>
-          </div>
-          <label>Ghi chú</label>
-          <textarea id="in_note"></textarea>
-
-          <label>Ảnh nhập (lưu Drive)</label>
-          <input id="images" type="file" accept="image/*" multiple>
-          <div class="preview" id="preview"></div>
-          <div class="tiny">Ảnh sẽ lưu Drive. Link lưu vào Products + Inbound.</div>
-        </div>
-
-        <div id="outOnly" style="display:none">
-          <div class="row">
-            <div>
-              <label>Số lượng bán *</label>
-              <input id="out_qty" type="number">
-            </div>
-            <div>
-              <label>Giá bán</label>
-              <input id="out_price" type="number">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label>Khách hàng</label>
-              <input id="customer" placeholder="VD: Anh A">
-            </div>
-            <div></div>
-          </div>
-          <label>Ghi chú</label>
-          <textarea id="out_note"></textarea>
-        </div>
-
-        <div class="btns">
-          <button class="primary" id="btnSave">Lưu</button>
-          <button class="ghost" id="btnClear">Xoá form</button>
-        </div>
-
-        <div id="status" class="status"></div>
       </div>
     </div>
-
-    <div class="card">
-      <h2><span id="rightTitle">Lịch sử</span><span class="pill" id="rightCount">0</span></h2>
-      <div class="content" style="overflow:auto">
-        <table>
-          <thead id="thead"></thead>
-          <tbody id="tbody"><tr><td class="tiny">Chưa có dữ liệu</td></tr></tbody>
-        </table>
-      </div>
-    </div>
   </div>
+
+  <div id="ftr"></div>
 </div>
 
-<div id="ftr"></div>
-
 <script type="module">
-  import { jsonp, postViaIframe, fileToBase64, inferCodeType, normalizeAlt, uiHeader, uiFooter } from "./app.js";
+  import { jsonp, postViaIframe, fileToBase64, inferCodeType, normalizeAlt, uiHeader, uiFooter, normCode } from "./app.js";
   const $ = (id)=>document.getElementById(id);
 
   $('hdr').innerHTML = uiHeader('index');
   $('ftr').innerHTML = uiFooter();
 
-  let mode = 'add'; // add | in | out
+  let mode = 'add';
   let selectedImages = [];
+  let addImages = [];
   let lookupTimer = null;
 
   function setStatus(type,msg){
@@ -222,7 +260,6 @@
     $('badgeType').textContent = type;
     $('labelMain').textContent = (type==='OEM') ? 'OEM *' : 'SKU *';
     $('labelAlt').textContent  = (type==='OEM') ? 'OEM thay thế' : 'Mã thay thế';
-    $('hint').textContent = '';
   }
 
   async function findExisting(){
@@ -232,12 +269,7 @@
     const res = await jsonp('find', { code_type:type, code_main:code });
     if(res.found){
       const p = res.product || {};
-      if (mode !== 'add') {
-        $('hint').innerHTML = `Tồn: <b>${p.stock ?? ''}</b> • ${p.name||''}`;
-      } else {
-        $('hint').innerHTML = `Đã có • Tồn: <b>${p.stock ?? ''}</b> (Lưu sẽ cập nhật thông tin)`;
-      }
-      // auto fill for add mode
+      $('hint').innerHTML = `Tồn: <b>${p.stock ?? ''}</b> • ${p.name||''}`;
       if (mode==='add'){
         if(!$('name').value) $('name').value = p.name || '';
         if(!$('brand_model').value) $('brand_model').value = p.brand_model || '';
@@ -246,6 +278,10 @@
         if($('cost_price').value==='') $('cost_price').value = p.cost_price || '';
         if($('sale_price').value==='') $('sale_price').value = p.sale_price || '';
         if($('code_alt').value==='') $('code_alt').value = p.code_alt || '';
+      }
+      if (mode==='in'){
+        if($('in_cost').value==='') $('in_cost').value = p.cost_price || '';
+        if($('in_sale').value==='') $('in_sale').value = p.sale_price || '';
       }
       if (mode==='out' && $('out_price').value==='') $('out_price').value = p.sale_price || '';
     } else {
@@ -315,17 +351,16 @@
   function switchMode(m){
     mode = m;
     clearStatus();
-    // tabs
+
     $('tAdd').classList.toggle('on', m==='add');
     $('tIn').classList.toggle('on', m==='in');
     $('tOut').classList.toggle('on', m==='out');
 
-    // sections
     $('addOnly').style.display = (m==='add') ? '' : 'none';
     $('inOnly').style.display = (m==='in') ? '' : 'none';
     $('outOnly').style.display = (m==='out') ? '' : 'none';
 
-    $('formTitle').textContent = (m==='add') ? 'Thêm sản phẩm' : (m==='in' ? 'Nhập hàng (tồn + nhập)' : 'Bán hàng (tồn - bán)');
+    $('formTitle').textContent = (m==='add') ? 'Thêm sản phẩm' : (m==='in' ? 'Nhập hàng (tồn + nhập, cập nhật giá theo mã)' : 'Bán hàng (tồn - bán)');
     $('btnSave').textContent = (m==='add') ? 'Lưu sản phẩm' : (m==='in' ? 'Nhập kho' : 'Bán hàng');
 
     updateLabels();
@@ -342,88 +377,122 @@
     $('shelf').value='';
     $('cost_price').value='';
     $('sale_price').value='';
+    $('add_qty').value='';
+    $('add_supplier').value='';
+    $('add_note').value='';
     $('in_qty').value='';
+    $('in_cost').value='';
+    $('in_sale').value='';
     $('supplier').value='';
     $('in_note').value='';
     $('out_qty').value='';
     $('out_price').value='';
     $('customer').value='';
     $('out_note').value='';
-    selectedImages=[]; renderPreview();
+    selectedImages=[]; renderPreview('preview', selectedImages);
+    addImages=[]; renderPreview('add_preview', addImages);
     $('hint').textContent='';
     clearStatus();
     $('code_main').focus();
   }
 
-  async function onPickImages(e){
-    const files = Array.from(e.target.files||[]);
+  async function onPickImages(inputId, storeArr){
+    const el = $(inputId);
+    const files = Array.from(el.files||[]);
     for (const f of files){
       const b64 = await fileToBase64(f);
-      selectedImages.push({ name:f.name, mimeType:f.type||'image/jpeg', dataBase64:b64 });
+      storeArr.push({ name:f.name, mimeType:f.type||'image/jpeg', dataBase64:b64 });
     }
-    $('images').value='';
-    renderPreview();
+    el.value='';
+    renderPreview(inputId==='images'?'preview':'add_preview', storeArr);
   }
-  function renderPreview(){
-    const box = $('preview'); box.innerHTML='';
-    selectedImages.forEach((img,idx)=>{
+
+  function renderPreview(containerId, storeArr){
+    const box = $(containerId); box.innerHTML='';
+    storeArr.forEach((img,idx)=>{
       const div = document.createElement('div');
       div.className='thumb';
       div.innerHTML = `<img src="data:${img.mimeType};base64,${img.dataBase64}"><div class="x">×</div>`;
-      div.querySelector('.x').onclick = ()=>{ selectedImages.splice(idx,1); renderPreview(); };
+      div.querySelector('.x').onclick = ()=>{ storeArr.splice(idx,1); renderPreview(containerId, storeArr); };
       box.appendChild(div);
     });
   }
 
   async function save(){
     try{
-      const payloadBase = { category:$('category').value, code_main:$('code_main').value };
+      const category = $('category').value;
+      const code_main = $('code_main').value;
 
       if (mode==='add'){
-        const payload = {
+        // 1) upsert product
+        const up = await postViaIframe({
           action:'product_upsert',
-          ...payloadBase,
+          category,
+          code_main,
           code_alt: normalizeAlt($('code_alt').value),
           name: $('name').value,
           brand_model: $('brand_model').value,
           unit: $('unit').value,
           shelf: $('shelf').value,
           cost_price: $('cost_price').value,
-          sale_price: $('sale_price').value
-        };
-        const res = await postViaIframe(payload);
-        if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
-        setStatus('ok', res.message);
+          sale_price: $('sale_price').value,
+          min_stock: ''
+        });
+        if(!up || !up.ok) return setStatus('err', up?.message || 'Có lỗi.');
+
+        // 2) if add_qty > 0 -> inbound_add to increase stock + save images + prices
+        const q = Number($('add_qty').value || 0);
+        if (q > 0){
+          const res = await postViaIframe({
+            action:'inbound_add',
+            category,
+            code_main,
+            qty: q,
+            cost_price: $('cost_price').value,
+            sale_price: $('sale_price').value,
+            supplier: $('add_supplier').value,
+            note: $('add_note').value,
+            images: addImages
+          });
+          if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi khi nhập ban đầu.');
+          addImages=[]; renderPreview('add_preview', addImages);
+          setStatus('ok', `Đã lưu sản phẩm + nhập ban đầu (+${q}).`);
+          return loadRight();
+        }
+
+        setStatus('ok', up.message);
         return;
       }
 
       if (mode==='in'){
-        const payload = {
+        // inbound: qty + update prices by code
+        const res = await postViaIframe({
           action:'inbound_add',
-          ...payloadBase,
+          category,
+          code_main,
           qty: $('in_qty').value,
-          cost_price: '', // optional: bạn muốn nhập giá nhập riêng thì đổi ở đây
+          cost_price: $('in_cost').value,
+          sale_price: $('in_sale').value,
           supplier: $('supplier').value,
           note: $('in_note').value,
           images: selectedImages
-        };
-        const res = await postViaIframe(payload);
+        });
         if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
+        selectedImages=[]; renderPreview('preview', selectedImages);
         setStatus('ok', res.message);
-        selectedImages=[]; renderPreview();
         return loadRight();
       }
 
       if (mode==='out'){
-        const payload = {
+        const res = await postViaIframe({
           action:'sale_add',
-          ...payloadBase,
+          category,
+          code_main,
           qty: $('out_qty').value,
           sale_price: $('out_price').value,
           customer: $('customer').value,
           note: $('out_note').value
-        };
-        const res = await postViaIframe(payload);
+        });
         if(!res || !res.ok) return setStatus('err', res?.message || 'Có lỗi.');
         setStatus('ok', res.message);
         return loadRight();
@@ -437,15 +506,17 @@
     const init = await jsonp('init');
     const cats = init.categories || [];
     const sups = init.suppliers || [];
+
     $('category').innerHTML = cats.length
       ? cats.map(c=>`<option value="${c}">${c}</option>`).join('')
       : `<option value="">(Chưa có nhóm – vào Admin thêm)</option>`;
+
     $('supList').innerHTML = sups.map(s=>`<option value="${s}"></option>`).join('');
+
     updateLabels();
     loadRight();
   }
 
-  // events
   $('tAdd').onclick=()=>switchMode('add');
   $('tIn').onclick=()=>switchMode('in');
   $('tOut').onclick=()=>switchMode('out');
@@ -453,9 +524,11 @@
   $('category').addEventListener('change', ()=>{ updateLabels(); findExisting(); });
   $('code_main').addEventListener('input', ()=>{
     if (lookupTimer) clearTimeout(lookupTimer);
-    lookupTimer = setTimeout(findExisting, 300);
+    lookupTimer = setTimeout(findExisting, 250);
   });
-  $('images')?.addEventListener('change', onPickImages);
+
+  $('images')?.addEventListener('change', ()=>onPickImages('images', selectedImages));
+  $('add_images')?.addEventListener('change', ()=>onPickImages('add_images', addImages));
 
   $('btnSave').addEventListener('click', (e)=>{ e.preventDefault(); save(); });
   $('btnClear').addEventListener('click', (e)=>{ e.preventDefault(); clearForm(); });
