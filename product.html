@@ -5,39 +5,146 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Products</title>
   <style>
-    :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;}
+    :root{
+      --b:#1a73e8;--b2:#0b57d0;
+      --line:#e0e0e0;--muted:#5f6368;
+      --soft:#eaf2ff;            /* pastel blue */
+      --card:#ffffff;
+      --shadow:0 14px 40px rgba(26,115,232,.12);
+      --shadow2:0 10px 24px rgba(0,0,0,.06);
+      --r:22px;
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:linear-gradient(180deg,var(--soft),#fff 45%);color:#202124}
+    body{
+      margin:0;font-family:system-ui;color:#202124;
+      background:linear-gradient(180deg,var(--soft),#fff 55%);
+    }
     .page{min-height:100vh;display:flex;flex-direction:column}
     .main{flex:1}
     .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+
     .hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
-    .hdr-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-    .brand{display:flex;gap:12px;align-items:center}
-    .truck{width:56px;height:56px;border-radius:16px;border:1px solid #d2e3fc;background:linear-gradient(135deg,#fff,#e8f0fe);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 22px rgba(26,115,232,.18)}
-    .title{font-weight:900}
-    .sub{font-size:12px;color:var(--muted)}
-    .nav a{color:var(--b2);font-weight:900;text-decoration:none;margin-right:12px}
-    .nav a.on{text-decoration:underline}
-    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#e8f0fe;color:var(--b2);border:1px solid #d2e3fc;font-weight:900}
-    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.04);overflow:hidden}
-    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px;display:flex;justify-content:space-between;align-items:center}
+    .card{
+      background:var(--card);
+      border:1px solid #dbe7ff;
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden
+    }
+    .card h2{
+      margin:0;padding:14px 16px;border-bottom:1px solid #e8f0fe;
+      font-size:16px;display:flex;justify-content:space-between;align-items:center
+    }
+    .pill{
+      font-size:12px;padding:6px 10px;border-radius:999px;
+      background:#e8f0fe;color:var(--b2);border:1px solid #d2e3fc;font-weight:900
+    }
+
     .content{padding:14px 16px}
     .row{display:grid;grid-template-columns:1.2fr .8fr .35fr;gap:10px}
     @media(max-width:860px){.row{grid-template-columns:1fr}}
+
     label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
-    input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px}
+    input,select{
+      width:100%;padding:11px 12px;border:1px solid #dbe7ff;border-radius:14px;
+      outline:none;font-size:14px;background:#fff
+    }
     input:focus,select:focus{border-color:#bcd3ff;box-shadow:0 0 0 4px rgba(26,115,232,.12)}
-    button{border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:900;background:linear-gradient(135deg,var(--b),var(--b2));color:#fff}
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
-    th{color:var(--muted);font-weight:900;background:#fbfbfd;text-align:left}
+    button{
+      border:none;border-radius:14px;padding:11px 14px;cursor:pointer;font-weight:900;
+      background:linear-gradient(135deg,var(--b),var(--b2));color:#fff
+    }
+
+    /* ===== Product grid (ô card giống e-commerce) ===== */
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+    }
+    @media(max-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+    @media(max-width:720px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media(max-width:420px){ .grid{grid-template-columns:1fr;} }
+
+    .p{
+      border:1px solid #dbe7ff;
+      border-radius:24px;
+      background:#fff;
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 320px;
+    }
+    .p__top{
+      position:relative;
+      background:linear-gradient(180deg,#f2f7ff,#ffffff 85%);
+      padding:10px 10px 0;
+    }
+    .badge{
+      position:absolute;left:10px;top:10px;
+      background:#e8f0fe;border:1px solid #d2e3fc;color:#0b57d0;
+      padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px;
+    }
+    .badge--sale{
+      left:auto;right:10px;
+      background:#fff0f0;border:1px solid #ffd2d2;color:#b42318;
+    }
+    .p__imgWrap{
+      width:100%;
+      aspect-ratio: 1 / 1;   /* vuông như ảnh */
+      border-radius:18px;
+      background:#fff;
+      border:1px solid #e8f0fe;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .p__imgWrap img{width:100%;height:100%;object-fit:contain}
+    .p__body{padding:12px 12px 10px;display:flex;flex-direction:column;gap:8px}
+    .p__name{
+      font-weight:900;
+      line-height:1.25;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+      overflow:hidden;
+      min-height: 2.5em;
+    }
+    .p__meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      background:#f5f8ff;border:1px solid #e8f0fe;color:#315a9b;
+      padding:4px 8px;border-radius:999px;font-weight:800
+    }
+    .p__priceRow{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .price{
+      font-weight:1000;
+      font-size:18px;
+      color:#0b57d0;
+    }
+    .subprice{font-size:12px;color:var(--muted)}
+    .p__bottom{
+      margin-top:auto;
+      padding:10px 12px 12px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-top:1px solid #eef4ff;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+    }
+    .stock{
+      font-size:12px;color:#0f5132;background:#ecfdf3;border:1px solid #abefc6;
+      padding:6px 10px;border-radius:999px;font-weight:900;
+    }
+    .code{
+      font-size:12px;color:#111827;background:#f3f4f6;border:1px solid #e5e7eb;
+      padding:6px 10px;border-radius:999px;font-weight:900;
+      max-width: 55%;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+
     .tiny{font-size:12px;color:var(--muted)}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
-    .img{width:46px;height:46px;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:#fff}
-    .img img{width:100%;height:100%;object-fit:cover}
     .footer{padding:12px 16px 16px;display:flex;justify-content:center}
-    .footer-pill{width:min(980px, calc(100% - 16px));border-radius:999px;padding:10px 14px;border:1px solid #d2e3fc;background:#ffffff;box-shadow:0 10px 26px rgba(26,115,232,.10);overflow:hidden}
+    .footer-pill{
+      width:min(980px, calc(100% - 16px));border-radius:999px;padding:10px 14px;
+      border:1px solid #d2e3fc;background:#ffffff;box-shadow:0 10px 26px rgba(26,115,232,.10);
+      overflow:hidden
+    }
     .marquee{overflow:hidden;white-space:nowrap}
     .marquee__inner{display:inline-flex;gap:32px;align-items:center;animation:marquee 14s linear infinite}
     .marquee__inner span{color:#93c5fd;font-weight:900;letter-spacing:.4px}
@@ -67,14 +174,11 @@
             </div>
           </div>
 
-          <div style="margin-top:12px;overflow:auto">
-            <table>
-              <thead>
-                <tr><th>Ảnh</th><th>Mã</th><th>Tên</th><th>Nhóm</th><th>Tồn</th><th>Giá</th></tr>
-              </thead>
-              <tbody id="tb"><tr><td colspan="6" class="tiny">Chưa có dữ liệu</td></tr></tbody>
-            </table>
+          <!-- THAY TABLE BẰNG GRID -->
+          <div id="grid" class="grid">
+            <div class="tiny">Chưa có dữ liệu</div>
           </div>
+
         </div>
       </div>
     </div>
@@ -90,11 +194,71 @@
   $('hdr').innerHTML = uiHeader('products');
   $('ftr').innerHTML = uiFooter();
 
+  const money = (v)=>{
+    const n = Number(v);
+    if (!isFinite(n)) return '';
+    return new Intl.NumberFormat('vi-VN').format(n) + 'đ';
+  };
+
   async function init(){
     const init = await jsonp('init');
     const cats = init.categories || [];
-    $('category').innerHTML = `<option value="">Tất cả</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+    $('category').innerHTML =
+      `<option value="">Tất cả</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
     load();
+  }
+
+  function render(rows){
+    const grid = $('grid');
+    grid.innerHTML = '';
+    if (!rows.length){
+      grid.innerHTML = `<div class="tiny">Chưa có dữ liệu</div>`;
+      return;
+    }
+
+    rows.forEach(p=>{
+      const img = firstImage(p.image_urls);
+      const codeMain = `${p.code_type||''}:${p.code_main||''}`.replace(/^:|:$/g,'');
+      const sale = money(p.sale_price);
+      const cost = money(p.cost_price);
+      const stock = (p.stock ?? '') === '' ? '' : String(p.stock);
+
+      // “Giảm %” chỉ là demo nếu bạn có field discount_percent thì tự map vào
+      const discount = (p.discount_percent ?? '').toString().trim();
+
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="p">
+          <div class="p__top">
+            ${p.category ? `<div class="badge">${p.category}</div>` : ``}
+            ${discount ? `<div class="badge badge--sale">-${discount}%</div>` : ``}
+
+            <div class="p__imgWrap">
+              ${img ? `<a href="${img}" target="_blank" rel="noopener"><img src="${img}" alt=""></a>` : `<div class="tiny">No image</div>`}
+            </div>
+          </div>
+
+          <div class="p__body">
+            <div class="p__name">${p.name || ''}</div>
+
+            <div class="p__meta">
+              ${p.brand_model ? `<span class="tag">${p.brand_model}</span>` : ``}
+              ${p.shelf ? `<span class="tag">Kệ: ${p.shelf}</span>` : ``}
+              ${p.code_alt ? `<span class="tag">${p.code_alt}</span>` : ``}
+            </div>
+
+            <div class="p__priceRow">
+              <div class="price">${sale || '—'}</div>
+              <div class="subprice">${cost ? `Nhập: ${cost}` : ''}</div>
+            </div>
+          </div>
+
+          <div class="p__bottom">
+            <div class="stock">${stock ? `Tồn: ${stock}` : 'Tồn: —'}</div>
+            <div class="code" title="${codeMain}">${codeMain || 'NO-CODE'}</div>
+          </div>
+        </div>
+      `);
+    });
   }
 
   async function load(){
@@ -103,30 +267,12 @@
     const res = await jsonp('products', { search, category, limit: 800 });
     const rows = res?.rows || [];
     $('count').textContent = rows.length + ' SP';
-
-    const tb = $('tb'); tb.innerHTML='';
-    if (!rows.length){
-      tb.innerHTML = `<tr><td colspan="6" class="tiny">Chưa có dữ liệu</td></tr>`;
-      return;
-    }
-
-    rows.forEach(p=>{
-      const img = firstImage(p.image_urls);
-      tb.insertAdjacentHTML('beforeend', `
-        <tr>
-          <td><div class="img">${img?`<a href="${img}" target="_blank"><img src="${img}"></a>`:''}</div></td>
-          <td class="mono">${p.code_type||''}:${p.code_main||''}<div class="tiny">${p.code_alt||''}</div></td>
-          <td>${p.name||''}<div class="tiny">${p.brand_model||''}</div></td>
-          <td>${p.category||''}<div class="tiny">${p.shelf||''}</div></td>
-          <td>${p.stock||''}</td>
-          <td class="tiny">Nhập: ${p.cost_price||''}<br>Bán: ${p.sale_price||''}</td>
-        </tr>
-      `);
-    });
+    render(rows);
   }
 
   $('btn').onclick=(e)=>{e.preventDefault();load();};
   $('search').addEventListener('keydown',(e)=>{ if(e.key==='Enter') load(); });
+  $('category').addEventListener('change', load);
 
   init();
 </script>
