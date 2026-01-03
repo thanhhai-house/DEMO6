@@ -1,6 +1,7 @@
-export const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwYflf8KUT0APaU_6NcXEeXucyZe3yDRbWTsE9WMa-S0YCBeX_2kipbY7irN0fB0VQ/exec";
-export const API_KEY = ""; // nếu backend có set APP.API_KEY thì điền giống
+export const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwZx1IoXyDbHzkvddg0hjZTO8nYHMlRqiEdheIihFT2s6ELoAmHXq0_Y4DywfHIOyI7/exec";
+export const API_KEY = "";
 
+/** JSONP GET */
 export function jsonp(action, params = {}) {
   return new Promise((resolve, reject) => {
     const cb = "cb_" + Math.random().toString(36).slice(2);
@@ -22,6 +23,7 @@ export function jsonp(action, params = {}) {
   });
 }
 
+/** POST (no CORS) using hidden iframe + postMessage */
 export function postViaIframe(payloadObj) {
   return new Promise((resolve) => {
     const iframeName = "if_" + Math.random().toString(36).slice(2);
@@ -59,18 +61,16 @@ export function postViaIframe(payloadObj) {
 export function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const rd = new FileReader();
-    rd.onload = () => {
-      const s = String(rd.result || "");
-      resolve(s.split(",")[1] || "");
-    };
+    rd.onload = () => resolve(String(rd.result || "").split(",")[1] || "");
     rd.onerror = reject;
     rd.readAsDataURL(file);
   });
 }
 
+// category rule (case-insensitive)
 export function inferCodeType(category) {
-  const c = String(category || "").trim().toUpperCase();
-  return c.startsWith("LỌC") ? "OEM" : "SKU";
+  const c = String(category || "").trim().toLowerCase();
+  return c.startsWith("lọc") ? "OEM" : "SKU";
 }
 
 export function normCode(s){ return String(s||"").trim().toUpperCase().replace(/\s+/g,''); }
@@ -79,7 +79,10 @@ export function normalizeAlt(s){
   return [...new Set(parts)].join(", ");
 }
 
-// Convert old Drive links -> direct image
+// compare categories case-insensitive
+export function catKey(s){ return String(s||"").trim().toLowerCase(); }
+
+// Drive link -> direct
 export function driveToDirect(url){
   const s = String(url||'').trim();
   let m = s.match(/\/d\/([a-zA-Z0-9_-]{10,})\//);
@@ -93,6 +96,7 @@ export function firstImage(urls){
   return list[0] ? driveToDirect(list[0]) : '';
 }
 
+// UI blocks
 export function uiHeader(active){
   return `
   <header class="hdr">
@@ -132,6 +136,7 @@ export function uiHeader(active){
 }
 
 export function uiFooter(){
+  // pastel blue text, footer at bottom (CSS on pages uses min-height layout)
   return `
   <footer class="footer">
     <div class="footer-pill">
