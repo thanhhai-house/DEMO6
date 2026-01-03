@@ -1,0 +1,383 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nhập sản phẩm</title>
+  <style>
+    :root{--b:#1a73e8;--b2:#0b57d0;--line:#e0e0e0;--muted:#5f6368;--soft:#f6f9ff;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui;background:linear-gradient(180deg,var(--soft),#fff 45%);color:#202124}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--b),#4fc3f7);box-shadow:0 8px 18px rgba(26,115,232,.18)}
+    nav a{color:var(--b2);font-weight:800;text-decoration:none;margin-right:10px}
+    .grid{display:grid;grid-template-columns:1.35fr .9fr;gap:14px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.04);overflow:hidden}
+    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:16px;display:flex;justify-content:space-between;align-items:center}
+    .badge{font-size:12px;padding:6px 10px;border-radius:999px;background:#e8f0fe;color:var(--b2);border:1px solid #d2e3fc}
+    .content{padding:14px 16px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:520px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
+    input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;outline:none;font-size:14px}
+    input:focus,select:focus,textarea:focus{border-color:#bcd3ff;box-shadow:0 0 0 4px rgba(26,115,232,.12)}
+    textarea{min-height:86px;resize:vertical}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:800}
+    .primary{background:linear-gradient(135deg,var(--b),var(--b2));color:#fff;box-shadow:0 10px 22px rgba(26,115,232,.24)}
+    .ghost{background:#fff;color:var(--b2);border:1px solid #d2e3fc}
+    .danger{background:#fff;color:#d93025;border:1px solid #f6c7c3}
+    .status{display:none;margin-top:10px;font-size:13px;padding:10px 12px;border-radius:12px;border:1px solid var(--line)}
+    .ok{display:block;border-color:#c7e7d1;background:#f2fff6;color:#137333}
+    .err{display:block;border-color:#f6c7c3;background:#fff5f5;color:#d93025}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{color:var(--muted);font-weight:800;background:#fbfbfd;text-align:left}
+    .tiny{font-size:12px;color:var(--muted)}
+    .preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .thumb{width:74px;height:74px;border-radius:14px;border:1px solid var(--line);overflow:hidden;position:relative}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .thumb .x{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <div style="font-weight:900">Quản lý kho phụ tùng</div>
+          <div class="tiny">GitHub Pages UI • Apps Script lưu Sheet + Drive</div>
+          <nav style="margin-top:6px">
+            <a href="./index.html">Nhập hàng</a>
+            <a href="./product.html">Sản phẩm</a>
+            <a href="./admin.html">Admin</a>
+          </nav>
+        </div>
+      </div>
+      <div class="badge" id="badgeType">SKU</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h2><span>Nhập sản phẩm (trang bìa)</span><span class="badge" id="badgeType2">SKU</span></h2>
+      <div class="content">
+        <div class="row">
+          <div>
+            <label>Nhóm hàng *</label>
+            <select id="category"></select>
+          </div>
+          <div>
+            <label>Loại mã</label>
+            <input id="code_type" disabled value="SKU" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label id="labelMain">SKU *</label>
+            <input id="code_main" placeholder="VD: SKU123 / 123ABC" />
+            <div class="tiny" id="existingHint"></div>
+          </div>
+          <div>
+            <label id="labelAlt">Mã thay thế</label>
+            <input id="code_alt" placeholder="Nhiều mã, cách nhau bằng dấu phẩy ," />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Tên sản phẩm *</label>
+            <input id="name" placeholder="VD: Lọc dầu Toyota ..." />
+          </div>
+          <div>
+            <label>Hãng xe / dòng xe</label>
+            <input id="brand_model" placeholder="VD: Vios, Morning..." />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Đơn vị</label>
+            <select id="unit"></select>
+          </div>
+          <div>
+            <label>Vị trí kệ</label>
+            <input id="shelf" placeholder="VD: Kệ A3" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Giá nhập</label>
+            <input id="cost_price" type="number" />
+          </div>
+          <div>
+            <label>Giá bán</label>
+            <input id="sale_price" type="number" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Số lượng nhập *</label>
+            <input id="qty" type="number" />
+          </div>
+          <div>
+            <label>Nhà cung cấp</label>
+            <input id="supplier" list="supList" />
+            <datalist id="supList"></datalist>
+          </div>
+        </div>
+
+        <div>
+          <label>Ghi chú</label>
+          <textarea id="note"></textarea>
+        </div>
+
+        <div>
+          <label>Ảnh sản phẩm</label>
+          <input id="images" type="file" accept="image/*" multiple />
+          <div class="preview" id="preview"></div>
+          <div class="tiny">Ảnh sẽ encode base64 → gửi backend → lưu Google Drive.</div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="btnSaveNew">Lưu & Tạo mới</button>
+          <button class="ghost" id="btnSave">Lưu</button>
+          <button class="danger" id="btnClear">Xoá form</button>
+        </div>
+
+        <div id="statusBox" class="status"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span>Vừa nhập gần đây</span><span class="badge" id="recentCount">0</span></h2>
+      <div class="content">
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr><th>Ngày</th><th>Mã</th><th>SL</th><th>NCC</th></tr>
+            </thead>
+            <tbody id="recentTbody">
+              <tr><td colspan="4" class="tiny">Chưa có dữ liệu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tiny" style="margin-top:10px">
+          Tip: Nhóm bắt đầu <b>LỌC</b> ⇒ tự chuyển sang <b>OEM</b> + “OEM thay thế”.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { jsonp, postViaIframe, fileToBase64, inferCodeType, normalizeAlt } from "./app.js";
+
+  const $ = (id)=>document.getElementById(id);
+  let initData = null;
+  let selectedImages = [];
+  let lookupTimer = null;
+
+  function setStatus(type, msg){
+    const box = $('statusBox');
+    box.className = 'status ' + (type==='ok' ? 'ok' : 'err');
+    box.textContent = msg;
+  }
+  function clearStatus(){
+    const box = $('statusBox');
+    box.className = 'status';
+    box.style.display = 'none';
+    box.textContent = '';
+  }
+
+  function updateLabels(){
+    const cat = $('category').value;
+    const type = inferCodeType(cat);
+    $('code_type').value = type;
+    $('badgeType').textContent = type;
+    $('badgeType2').textContent = type;
+
+    $('labelMain').textContent = (type==='OEM') ? 'OEM *' : 'SKU *';
+    $('labelAlt').textContent  = (type==='OEM') ? 'OEM thay thế' : 'Mã thay thế';
+    $('existingHint').textContent = '';
+  }
+
+  function renderRecent(rows){
+    const tb = $('recentTbody');
+    tb.innerHTML = '';
+    $('recentCount').textContent = String(rows.length);
+    if (!rows.length){
+      tb.innerHTML = '<tr><td colspan="4" class="tiny">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    rows.forEach(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="tiny">${r.date||''}</td>
+        <td class="mono">${(r.code_type||'')}:${(r.code_main||'')}</td>
+        <td>${r.qty||''}</td>
+        <td class="tiny">${r.supplier||''}</td>
+      `;
+      tb.appendChild(tr);
+    });
+  }
+
+  async function loadInit(){
+    initData = await jsonp('init');
+    // categories
+    $('category').innerHTML = '';
+    (initData.categories||[]).forEach(c=>{
+      const opt = document.createElement('option');
+      opt.value=c; opt.textContent=c;
+      $('category').appendChild(opt);
+    });
+    // units
+    $('unit').innerHTML = '<option value=""></option>';
+    (initData.units||[]).forEach(u=>{
+      const opt = document.createElement('option');
+      opt.value=u; opt.textContent=u;
+      $('unit').appendChild(opt);
+    });
+    // suppliers datalist
+    $('supList').innerHTML = '';
+    (initData.suppliers||[]).forEach(s=>{
+      const opt = document.createElement('option');
+      opt.value=s;
+      $('supList').appendChild(opt);
+    });
+
+    updateLabels();
+    const recent = await jsonp('recent', { limit: 20 });
+    renderRecent(recent.rows||[]);
+  }
+
+  function renderPreview(){
+    const box = $('preview');
+    box.innerHTML = '';
+    selectedImages.forEach((img, idx)=>{
+      const div = document.createElement('div');
+      div.className='thumb';
+      const im = document.createElement('img');
+      im.src = `data:${img.mimeType};base64,${img.dataBase64}`;
+      const x = document.createElement('div');
+      x.className='x'; x.textContent='×';
+      x.onclick = ()=>{ selectedImages.splice(idx,1); renderPreview(); };
+      div.appendChild(im); div.appendChild(x);
+      box.appendChild(div);
+    });
+  }
+
+  async function onPickImages(e){
+    const files = Array.from(e.target.files||[]);
+    for (const f of files){
+      const b64 = await fileToBase64(f);
+      selectedImages.push({ name:f.name, mimeType:f.type||'image/jpeg', dataBase64:b64 });
+    }
+    $('images').value='';
+    renderPreview();
+  }
+
+  async function findExisting(){
+    const cat = $('category').value;
+    const type = inferCodeType(cat);
+    const codeMain = ($('code_main').value||'').trim();
+    if (!codeMain){ $('existingHint').textContent=''; return; }
+
+    const res = await jsonp('find', { code_type:type, code_main:codeMain });
+    if (!res.ok) return;
+
+    if (res.found){
+      const p = res.product||{};
+      $('existingHint').innerHTML = `Đã có hàng này — Tồn hiện tại: <b>${p.stock ?? ''}</b>`;
+      if (!$('name').value) $('name').value = p.name || '';
+      if (!$('brand_model').value) $('brand_model').value = p.brand_model || '';
+      if (!$('unit').value) $('unit').value = p.unit || '';
+      if (!$('shelf').value) $('shelf').value = p.shelf || '';
+      if ($('cost_price').value==='') $('cost_price').value = p.cost_price || '';
+      if ($('sale_price').value==='') $('sale_price').value = p.sale_price || '';
+      if ($('code_alt').value==='') $('code_alt').value = p.code_alt || '';
+    } else {
+      $('existingHint').textContent = 'Chưa có mã này — sẽ tạo mới khi lưu.';
+    }
+  }
+
+  function clearForm(keepCategory=true){
+    $('code_main').value='';
+    $('code_alt').value='';
+    $('name').value='';
+    $('brand_model').value='';
+    $('unit').value='';
+    $('shelf').value='';
+    $('cost_price').value='';
+    $('sale_price').value='';
+    $('qty').value='';
+    $('supplier').value='';
+    $('note').value='';
+    selectedImages = [];
+    renderPreview();
+    $('existingHint').textContent='';
+    clearStatus();
+    if (!keepCategory) $('category').selectedIndex=0;
+    updateLabels();
+    $('code_main').focus();
+  }
+
+  async function save(thenClear){
+    try{
+      const payload = {
+        category: $('category').value,
+        code_main: $('code_main').value,
+        code_alt: normalizeAlt($('code_alt').value),
+        name: $('name').value,
+        brand_model: $('brand_model').value,
+        unit: $('unit').value,
+        shelf: $('shelf').value,
+        cost_price: $('cost_price').value,
+        sale_price: $('sale_price').value,
+        qty: $('qty').value,
+        supplier: $('supplier').value,
+        note: $('note').value,
+        images: selectedImages
+      };
+
+      const res = await postViaIframe(payload);
+      if (!res || !res.ok){
+        setStatus('err', (res && res.message) ? res.message : 'Có lỗi xảy ra.');
+        return;
+      }
+      setStatus('ok', res.message || 'Đã lưu.');
+      renderRecent(res.recent || []);
+      if (thenClear) clearForm(true);
+    }catch(err){
+      setStatus('err', 'Lỗi: ' + (err && err.message ? err.message : err));
+    }
+  }
+
+  // events
+  $('category').addEventListener('change', ()=>{ updateLabels(); findExisting(); });
+  $('code_main').addEventListener('input', ()=>{
+    if (lookupTimer) clearTimeout(lookupTimer);
+    lookupTimer = setTimeout(findExisting, 350);
+  });
+  $('images').addEventListener('change', onPickImages);
+
+  $('btnSaveNew').addEventListener('click', (e)=>{ e.preventDefault(); save(true); });
+  $('btnSave').addEventListener('click', (e)=>{ e.preventDefault(); save(false); });
+  $('btnClear').addEventListener('click', (e)=>{ e.preventDefault(); clearForm(true); });
+
+  loadInit();
+</script>
+</body>
+</html>
