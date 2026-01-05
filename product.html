@@ -4,7 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Products</title>
-
   <style>
     :root{
       --b:#1a73e8;--b2:#0b57d0;
@@ -20,220 +19,376 @@
       margin:0;font-family:system-ui;color:#202124;
       background:linear-gradient(180deg,var(--soft),#fff 55%);
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .page{min-height:100vh;display:flex;flex-direction:column}
+    .main{flex:1}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+
+    .hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
     .card{
-      background:#fff;border:1px solid #dbe7ff;border-radius:22px;
-      box-shadow:var(--shadow);overflow:hidden
+      background:var(--card);
+      border:1px solid #dbe7ff;
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden
     }
-    h2{
+    .card h2{
       margin:0;padding:14px 16px;border-bottom:1px solid #e8f0fe;
-      display:flex;justify-content:space-between;align-items:center
+      font-size:16px;display:flex;justify-content:space-between;align-items:center
     }
     .pill{
-      background:#e8f0fe;border:1px solid #d2e3fc;
-      padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px
+      font-size:12px;padding:6px 10px;border-radius:999px;
+      background:#e8f0fe;color:var(--b2);border:1px solid #d2e3fc;font-weight:900
     }
-    .content{padding:14px 16px}
 
-    .row{
-      display:grid;
-      grid-template-columns:1.2fr .8fr .35fr;
-      gap:10px
-    }
+    .content{padding:14px 16px}
+    .row{display:grid;grid-template-columns:1.2fr .8fr .35fr;gap:10px}
     @media(max-width:860px){.row{grid-template-columns:1fr}}
 
-    label{font-size:12px;color:var(--muted)}
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
     input,select{
-      width:100%;padding:11px 12px;border-radius:14px;
-      border:1px solid #dbe7ff;font-size:14px
+      width:100%;padding:11px 12px;border:1px solid #dbe7ff;border-radius:14px;
+      outline:none;font-size:14px;background:#fff
     }
+    input:focus,select:focus{border-color:#bcd3ff;box-shadow:0 0 0 4px rgba(26,115,232,.12)}
     button{
-      border:none;border-radius:14px;padding:11px 14px;
-      background:linear-gradient(135deg,var(--b),var(--b2));
-      color:#fff;font-weight:900;cursor:pointer
+      border:none;border-radius:14px;padding:11px 14px;cursor:pointer;font-weight:900;
+      background:linear-gradient(135deg,var(--b),var(--b2));color:#fff
     }
 
-    /* grid */
     .grid{
       margin-top:14px;
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
     }
-    @media(max-width:980px){.grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:420px){.grid{grid-template-columns:1fr}}
+    @media(max-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+    @media(max-width:720px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media(max-width:420px){ .grid{grid-template-columns:1fr;} }
 
     .p{
-      border:1px solid #dbe7ff;border-radius:24px;
+      border:1px solid #dbe7ff;
+      border-radius:24px;
+      background:#fff;
       box-shadow:var(--shadow2);
-      background:#fff;display:flex;flex-direction:column;
-      min-height:320px
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 320px;
     }
-    .p__top{padding:10px;background:#f5f8ff}
-    .p__imgWrap{
-      aspect-ratio:1/1;border-radius:18px;
-      border:1px solid #e8f0fe;
-      display:flex;align-items:center;justify-content:center;
-      background:#fff;overflow:hidden
+    .p__top{
+      position:relative;
+      background:linear-gradient(180deg,#f2f7ff,#ffffff 85%);
+      padding:10px 10px 0;
     }
-    .p__imgWrap img{width:100%;height:100%;object-fit:contain}
     .badge{
-      font-size:12px;font-weight:900;
-      background:#e8f0fe;color:#0b57d0;
-      border:1px solid #d2e3fc;
-      padding:6px 10px;border-radius:999px;
-      display:inline-block;margin-bottom:6px
+      position:absolute;left:10px;top:10px;
+      background:#e8f0fe;border:1px solid #d2e3fc;color:#0b57d0;
+      padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px;
     }
     .badge--sale{
-      background:#fff0f0;color:#b42318;border-color:#ffd2d2
+      left:auto;right:10px;
+      background:#fff0f0;border:1px solid #ffd2d2;color:#b42318;
     }
-    .p__body{padding:12px;display:flex;flex-direction:column;gap:8px}
-    .p__name{font-weight:900;line-height:1.3}
+    .p__imgWrap{
+      width:100%;
+      aspect-ratio: 1 / 1;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid #e8f0fe;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .p__imgWrap img{width:100%;height:100%;object-fit:contain}
+    .p__body{padding:12px 12px 10px;display:flex;flex-direction:column;gap:8px}
+    .p__name{
+      font-weight:900;
+      line-height:1.25;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+      overflow:hidden;
+      min-height: 2.5em;
+    }
+    .p__meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
     .tag{
-      background:#f5f8ff;border:1px solid #e8f0fe;
-      padding:4px 8px;border-radius:999px;
-      font-size:12px;font-weight:800
+      background:#f5f8ff;border:1px solid #e8f0fe;color:#315a9b;
+      padding:4px 8px;border-radius:999px;font-weight:800
     }
-    .price{font-size:18px;font-weight:1000;color:#0b57d0}
-    .tiny{font-size:12px;color:#5f6368}
+    .p__priceRow{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .price{
+      font-weight:1000;
+      font-size:18px;
+      color:#0b57d0;
+    }
+    .subprice{font-size:12px;color:var(--muted)}
     .p__bottom{
-      margin-top:auto;padding:10px 12px;
-      display:flex;justify-content:space-between;
-      border-top:1px solid #eef4ff
+      margin-top:auto;
+      padding:10px 12px 12px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-top:1px solid #eef4ff;
+      background:linear-gradient(180deg,#fff,#fbfdff);
     }
-    .stock,.code{
-      font-size:12px;font-weight:900;
-      padding:6px 10px;border-radius:999px
+    .stock{
+      font-size:12px;color:#0f5132;background:#ecfdf3;border:1px solid #abefc6;
+      padding:6px 10px;border-radius:999px;font-weight:900;
     }
-    .stock{background:#ecfdf3;border:1px solid #abefc6}
-    .code{background:#f3f4f6;border:1px solid #e5e7eb}
+    .code{
+      font-size:12px;color:#111827;background:#f3f4f6;border:1px solid #e5e7eb;
+      padding:6px 10px;border-radius:999px;font-weight:900;
+      max-width: 55%;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+
+    .tiny{font-size:12px;color:var(--muted)}
   </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="card">
-    <h2>
-      <span>Danh sách sản phẩm</span>
-      <span class="pill" id="count">0</span>
-    </h2>
+<div class="page">
 
-    <div class="content">
-      <div class="row">
-        <div>
-          <label>Tìm kiếm</label>
-          <input id="search" placeholder="Tên, mã, OEM...">
-        </div>
-        <div>
-          <label>Nhóm hàng</label>
-          <select id="category">
-            <option value="">Tất cả</option>
-          </select>
-        </div>
-        <div style="display:flex;align-items:end">
-          <button id="btn">Tải</button>
-        </div>
-      </div>
+  <div class="main">
+    <div class="wrap">
+      <div class="card">
+        <h2><span>Danh sách sản phẩm</span><span class="pill" id="count">0</span></h2>
+        <div class="content">
+          <div class="row">
+            <div>
+              <label>Tìm kiếm</label>
+              <input id="search" placeholder="OEM/SKU, tên, mã thay thế...">
+            </div>
+            <div>
+              <label>Nhóm hàng</label>
+              <select id="category">
+                <option value="">Tất cả</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:end">
+              <button id="btn">Tải</button>
+            </div>
+          </div>
 
-      <div id="grid" class="grid">
-        <div class="tiny">Chưa có dữ liệu</div>
+          <div id="grid" class="grid">
+            <div class="tiny">Chưa có dữ liệu</div>
+          </div>
+
+          <div class="tiny" id="dbg" style="margin-top:10px;"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ===== MOCK JSONP (khi gắn GAS thì bỏ mock này) ===== */
-async function jsonp(action, params={}){
-  if(action!=='products') return {categories:[]};
+  /************ CẤU HÌNH ************/
+  // 1) Nếu bạn đã deploy Apps Script WebApp, dán URL ở đây:
+  // Ví dụ: https://script.google.com/macros/s/AKfycbxxxx/exec
+  const API_BASE = "https://script.google.com/macros/s/AKfycbwZx1IoXyDbHzkvddg0hjZTO8nYHMlRqiEdheIihFT2s6ELoAmHXq0_Y4DywfHIOyI7/exec"; // <-- DÁN LINK WEBAPP Ở ĐÂY (nếu có)
 
-  return {
-    rows:[
-      {
-        "Tags Products":"Lọc dầu Toyota",
-        "Category":"Động cơ",
-        "Sale Price":120000,
-        "Cost Price":80000,
-        "Stock":15,
-        "SKU":"TOY-OF-01",
-        "Images":"https://i.imgur.com/6XH9K0N.png"
-      }
-    ]
-  }
-}
-/* =================================================== */
+  // 2) Nếu chưa có API_BASE, trang sẽ chạy MOCK data để bạn test UI
+  const USE_MOCK_WHEN_NO_API = true;
 
-const $ = id=>document.getElementById(id);
+  /************ HELPERS ************/
+  const $ = (id)=>document.getElementById(id);
 
-const money=v=>{
-  const n=Number(v);
-  return isFinite(n)?new Intl.NumberFormat('vi-VN').format(n)+'đ':'';
-};
+  const money = (v)=>{
+    const n = Number(v);
+    if (!isFinite(n)) return '';
+    return new Intl.NumberFormat('vi-VN').format(n) + 'đ';
+  };
 
-function norm(o){
-  const x={};
-  for(const k in o) x[k.trim().toLowerCase()]=o[k];
-  return x;
-}
-const pick=(o,...k)=>k.map(x=>o[x]).find(v=>v!==undefined&&v!=='' )||'';
-
-function firstImage(v){
-  if(Array.isArray(v)) return v[0]||'';
-  if(typeof v==='string') return v.split(/[,\s]+/)[0]||'';
-  return '';
-}
-
-function render(rows){
-  const grid=$('grid');
-  grid.innerHTML='';
-  if(!rows.length){
-    grid.innerHTML='<div class="tiny">Chưa có dữ liệu</div>';return;
+  // normalize key: "Tags Products" -> "tags products"
+  function normKeyObj(o){
+    const x = {};
+    if (!o || typeof o !== "object") return x;
+    for (const [k,v] of Object.entries(o)){
+      x[String(k).trim().toLowerCase()] = v;
+    }
+    return x;
   }
 
-  rows.forEach(r=>{
-    const p=norm(r);
+  function pick(obj, ...keys){
+    for (const k of keys){
+      const v = obj[k];
+      if (v !== undefined && v !== null && String(v).trim() !== '') return v;
+    }
+    return '';
+  }
 
-    const name=pick(p,'tags products','product','products','name');
-    const cat =pick(p,'category');
-    const sale=money(pick(p,'sale price','price'));
-    const cost=money(pick(p,'cost price','cost'));
-    const stock=pick(p,'stock');
-    const code =pick(p,'sku','code');
-    const img =firstImage(pick(p,'images','image'));
+  function firstImage(v){
+    if (Array.isArray(v)) return v[0] || '';
+    if (typeof v === 'string') return v.split(/[,\s]+/).filter(Boolean)[0] || '';
+    return '';
+  }
 
-    grid.insertAdjacentHTML('beforeend',`
-      <div class="p">
-        <div class="p__top">
-          ${cat?`<div class="badge">${cat}</div>`:''}
-          <div class="p__imgWrap">
-            ${img?`<img src="${img}">`:`<div class="tiny">No image</div>`}
+  // jsonp kiểu “đơn giản”: API trả JSON trực tiếp (khuyến nghị cho GH Pages)
+  async function api(action, params={}){
+    if (!API_BASE){
+      if (USE_MOCK_WHEN_NO_API) return mockApi(action, params);
+      throw new Error("Chưa cấu hình API_BASE");
+    }
+
+    const url = new URL(API_BASE);
+    url.searchParams.set("action", action);
+    for (const [k,v] of Object.entries(params)){
+      url.searchParams.set(k, v);
+    }
+
+    const r = await fetch(url.toString(), { method:"GET" });
+    if (!r.ok) throw new Error("API lỗi: " + r.status);
+    return await r.json();
+  }
+
+  // MOCK để test UI (xóa/không cần khi có API thật)
+  function mockApi(action, params){
+    if (action === "init"){
+      return Promise.resolve({ categories:["Động cơ","Gầm","Điện"] });
+    }
+    if (action === "products"){
+      const rows = [
+        {
+          "Tags Products":"Lọc dầu Toyota",
+          "Category":"Động cơ",
+          "Sale Price":120000,
+          "Cost Price":80000,
+          "Stock":15,
+          "SKU":"TOY-OF-01",
+          "Images":"https://i.imgur.com/6XH9K0N.png"
+        },
+        {
+          "Products":"Bugi Denso",
+          "Category":"Điện",
+          "Price":95000,
+          "Cost":60000,
+          "Qty":32,
+          "Code":"DNS-BG-02",
+          "Image_urls":"https://i.imgur.com/2yaf2wb.png"
+        }
+      ];
+
+      const q = (params.search || "").toLowerCase().trim();
+      const cat = (params.category || "").toLowerCase().trim();
+
+      const filtered = rows.filter(r=>{
+        const p = normKeyObj(r);
+        const name = pick(p,"tags products","products","name");
+        const code = pick(p,"sku","code","oem");
+        const c = pick(p,"category");
+        const okQ = !q || (String(name).toLowerCase().includes(q) || String(code).toLowerCase().includes(q));
+        const okC = !cat || String(c).toLowerCase() === cat;
+        return okQ && okC;
+      });
+
+      return Promise.resolve({ rows: filtered });
+    }
+    return Promise.resolve({});
+  }
+
+  /************ RENDER ************/
+  function render(rows){
+    const grid = $('grid');
+    grid.innerHTML = '';
+
+    if (!Array.isArray(rows) || rows.length === 0){
+      grid.innerHTML = `<div class="tiny">Chưa có dữ liệu</div>`;
+      return;
+    }
+
+    rows.forEach(raw=>{
+      const p = normKeyObj(raw);
+
+      // FIX: hỗ trợ cột "Tags Products" (có dấu cách)
+      const name = pick(p, "tags products", "products", "name", "tên", "ten") || "—";
+      const category = pick(p, "category", "nhóm hàng", "group");
+      const brand_model = pick(p, "brand_model", "brand model", "model", "hãng xe", "hang xe");
+      const shelf = pick(p, "shelf", "kệ", "ke");
+      const code_alt = pick(p, "code_alt", "mã thay thế", "ma thay the", "alt");
+
+      const code_type = pick(p, "code_type", "loại mã", "loai ma");
+      const code_main = pick(p, "code_main", "sku", "oem", "code", "mã chính", "ma chinh");
+      const codeMain = `${code_type||''}:${code_main||''}`.replace(/^:|:$/g,'');
+
+      const sale_price = pick(p, "sale_price", "sale price", "giá bán", "gia ban", "price");
+      const cost_price = pick(p, "cost_price", "cost price", "giá nhập", "gia nhap", "cost");
+      const stockVal  = pick(p, "stock", "tồn", "ton", "qty", "quantity");
+
+      const discount = pick(p, "discount_percent", "giảm %", "giam %", "discount");
+
+      let image_urls = p["image_urls"] ?? p["images"] ?? p["image"] ?? "";
+      const img = firstImage(image_urls);
+
+      const sale = money(sale_price);
+      const cost = money(cost_price);
+      const stock = (stockVal ?? '') === '' ? '' : String(stockVal);
+
+      grid.insertAdjacentHTML('beforeend', `
+        <div class="p">
+          <div class="p__top">
+            ${category ? `<div class="badge">${category}</div>` : ``}
+            ${discount ? `<div class="badge badge--sale">-${discount}%</div>` : ``}
+
+            <div class="p__imgWrap">
+              ${img ? `<a href="${img}" target="_blank" rel="noopener"><img src="${img}" alt=""></a>` : `<div class="tiny">No image</div>`}
+            </div>
+          </div>
+
+          <div class="p__body">
+            <div class="p__name">${name}</div>
+
+            <div class="p__meta">
+              ${brand_model ? `<span class="tag">${brand_model}</span>` : ``}
+              ${shelf ? `<span class="tag">Kệ: ${shelf}</span>` : ``}
+              ${code_alt ? `<span class="tag">${code_alt}</span>` : ``}
+            </div>
+
+            <div class="p__priceRow">
+              <div class="price">${sale || '—'}</div>
+              <div class="subprice">${cost ? `Nhập: ${cost}` : ''}</div>
+            </div>
+          </div>
+
+          <div class="p__bottom">
+            <div class="stock">${stock ? `Tồn: ${stock}` : 'Tồn: —'}</div>
+            <div class="code" title="${codeMain}">${codeMain || 'NO-CODE'}</div>
           </div>
         </div>
-        <div class="p__body">
-          <div class="p__name">${name}</div>
-          <div class="price">${sale||'—'}</div>
-          <div class="tiny">${cost?`Nhập: ${cost}`:''}</div>
-        </div>
-        <div class="p__bottom">
-          <div class="stock">Tồn: ${stock||'—'}</div>
-          <div class="code">${code||'NO-CODE'}</div>
-        </div>
-      </div>
-    `);
-  });
+      `);
+    });
+  }
 
-  $('count').textContent=rows.length+' SP';
-}
+  async function init(){
+    try{
+      const init = await api('init');
+      const cats = init.categories || [];
+      $('category').innerHTML =
+        `<option value="">Tất cả</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+      $('dbg').textContent = API_BASE ? "API: OK" : "API: đang dùng MOCK (chưa cấu hình API_BASE)";
+      await load();
+    }catch(err){
+      $('dbg').textContent = "Lỗi init: " + err.message;
+      console.error(err);
+    }
+  }
 
-async function load(){
-  const res=await jsonp('products');
-  console.log(res.rows[0]);
-  render(res.rows||[]);
-}
+  async function load(){
+    try{
+      const search = $('search').value || '';
+      const category = $('category').value || '';
+      const res = await api('products', { search, category, limit: 800 });
 
-$('btn').onclick=load;
-load();
+      console.log('[products] res=', res);
+      console.log('[products] first row=', res?.rows?.[0]);
+
+      const rows = res?.rows || [];
+      $('count').textContent = rows.length + ' SP';
+      render(rows);
+    }catch(err){
+      $('grid').innerHTML = `<div class="tiny">Lỗi load: ${err.message}</div>`;
+      console.error(err);
+    }
+  }
+
+  $('btn').onclick=(e)=>{e.preventDefault();load();};
+  $('search').addEventListener('keydown',(e)=>{ if(e.key==='Enter') load(); });
+  $('category').addEventListener('change', load);
+
+  init();
 </script>
 </body>
 </html>
