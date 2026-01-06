@@ -177,11 +177,7 @@
 
 <script>
   /************ CẤU HÌNH ************/
-  // 1) Nếu bạn đã deploy Apps Script WebApp, dán URL ở đây:
-  // Ví dụ: https://script.google.com/macros/s/AKfycbxxxx/exec
-  const API_BASE = "https://script.google.com/macros/s/AKfycbwZx1IoXyDbHzkvddg0hjZTO8nYHMlRqiEdheIihFT2s6ELoAmHXq0_Y4DywfHIOyI7/exec"; // <-- DÁN LINK WEBAPP Ở ĐÂY (nếu có)
-
-  // 2) Nếu chưa có API_BASE, trang sẽ chạy MOCK data để bạn test UI
+  const API_BASE = "https://script.google.com/macros/s/AKfycbz1CzsrPjdl8wjE2iReR9XbPVXHtwar7HVwy-UmJp9Ls0qeXKRNi6Egs1wCYxjyuNEA/exec";
   const USE_MOCK_WHEN_NO_API = true;
 
   /************ HELPERS ************/
@@ -193,7 +189,6 @@
     return new Intl.NumberFormat('vi-VN').format(n) + 'đ';
   };
 
-  // normalize key: "Tags Products" -> "tags products"
   function normKeyObj(o){
     const x = {};
     if (!o || typeof o !== "object") return x;
@@ -217,7 +212,6 @@
     return '';
   }
 
-  // jsonp kiểu “đơn giản”: API trả JSON trực tiếp (khuyến nghị cho GH Pages)
   async function api(action, params={}){
     if (!API_BASE){
       if (USE_MOCK_WHEN_NO_API) return mockApi(action, params);
@@ -235,7 +229,6 @@
     return await r.json();
   }
 
-  // MOCK để test UI (xóa/không cần khi có API thật)
   function mockApi(action, params){
     if (action === "init"){
       return Promise.resolve({ categories:["Động cơ","Gầm","Điện"] });
@@ -293,7 +286,7 @@
     rows.forEach(raw=>{
       const p = normKeyObj(raw);
 
-      // FIX: hỗ trợ cột "Tags Products" (có dấu cách)
+      // ƯU TIÊN "tags products" (đúng key bạn muốn)
       const name = pick(p, "tags products", "products", "name", "tên", "ten") || "—";
       const category = pick(p, "category", "nhóm hàng", "group");
       const brand_model = pick(p, "brand_model", "brand model", "model", "hãng xe", "hang xe");
@@ -371,9 +364,6 @@
       const search = $('search').value || '';
       const category = $('category').value || '';
       const res = await api('products', { search, category, limit: 800 });
-
-      console.log('[products] res=', res);
-      console.log('[products] first row=', res?.rows?.[0]);
 
       const rows = res?.rows || [];
       $('count').textContent = rows.length + ' SP';
