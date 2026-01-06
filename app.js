@@ -1,4 +1,4 @@
-export const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwZx1IoXyDbHzkvddg0hjZTO8nYHMlRqiEdheIihFT2s6ELoAmHXq0_Y4DywfHIOyI7/exec";
+export const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz1CzsrPjdl8wjE2iReR9XbPVXHtwar7HVwy-UmJp9Ls0qeXKRNi6Egs1wCYxjyuNEA/exec";
 export const API_KEY = "";
 
 /** JSONP GET */
