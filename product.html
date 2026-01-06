@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <base href="./">
   <title>Products</title>
   <style>
     :root{
@@ -19,11 +20,23 @@
       margin:0;font-family:system-ui;color:#202124;
       background:linear-gradient(180deg,var(--soft),#fff 55%);
     }
-    .page{min-height:100vh;display:flex;flex-direction:column}
-    .main{flex:1}
     .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
 
-    .hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+    /* ===== HEADER / NAV (FIX 404) ===== */
+    header{
+      display:flex;align-items:center;gap:12px;
+      padding:10px 0;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:12px;
+      background:#fff;border:1px solid #dbe7ff;display:grid;place-items:center
+    }
+    .t1{font-weight:900}
+    .t2{font-size:12px;color:var(--muted)}
+    nav{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap}
+    nav a{color:var(--b2);font-weight:900;text-decoration:none}
+    nav a:hover{text-decoration:underline}
+
     .card{
       background:var(--card);
       border:1px solid #dbe7ff;
@@ -141,43 +154,54 @@
   </style>
 </head>
 <body>
-<div class="page">
+<div class="wrap">
 
-  <div class="main">
-    <div class="wrap">
-      <div class="card">
-        <h2><span>Danh sách sản phẩm</span><span class="pill" id="count">0</span></h2>
-        <div class="content">
-          <div class="row">
-            <div>
-              <label>Tìm kiếm</label>
-              <input id="search" placeholder="OEM/SKU, tên, mã thay thế...">
-            </div>
-            <div>
-              <label>Nhóm hàng</label>
-              <select id="category">
-                <option value="">Tất cả</option>
-              </select>
-            </div>
-            <div style="display:flex;align-items:end">
-              <button id="btn">Tải</button>
-            </div>
-          </div>
+  <!-- HEADER + NAV FIX 404 -->
+  <header>
+    <div class="logo">🚚</div>
+    <div>
+      <div class="t1">Thanh hải - phụ tùng</div>
+      <div class="t2">GitHub UI · Apps Script lưu Sheet + Drive</div>
+    </div>
+    <nav>
+      <a href="./index.html">Index</a>
+      <a href="./products.html">Products</a>
+      <a href="./admin.html">Admin</a>
+    </nav>
+  </header>
 
-          <div id="grid" class="grid">
-            <div class="tiny">Chưa có dữ liệu</div>
-          </div>
-
-          <div class="tiny" id="dbg" style="margin-top:10px;"></div>
+  <div class="card">
+    <h2><span>Danh sách sản phẩm</span><span class="pill" id="count">0</span></h2>
+    <div class="content">
+      <div class="row">
+        <div>
+          <label>Tìm kiếm</label>
+          <input id="search" placeholder="OEM/SKU, tên, mã thay thế...">
+        </div>
+        <div>
+          <label>Nhóm hàng</label>
+          <select id="category">
+            <option value="">Tất cả</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:end">
+          <button id="btn">Tải</button>
         </div>
       </div>
+
+      <div id="grid" class="grid">
+        <div class="tiny">Chưa có dữ liệu</div>
+      </div>
+
+      <div class="tiny" id="dbg" style="margin-top:10px;"></div>
     </div>
   </div>
 </div>
 
 <script>
   /************ CẤU HÌNH ************/
-  const API_BASE = "https://script.google.com/macros/s/AKfycbz1CzsrPjdl8wjE2iReR9XbPVXHtwar7HVwy-UmJp9Ls0qeXKRNi6Egs1wCYxjyuNEA/exec";
+  const API_BASE = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE"; 
+  // ví dụ: https://script.google.com/macros/s/AKfycbxxxx/exec
   const USE_MOCK_WHEN_NO_API = true;
 
   /************ HELPERS ************/
@@ -213,7 +237,7 @@
   }
 
   async function api(action, params={}){
-    if (!API_BASE){
+    if (!API_BASE || API_BASE.includes("PASTE_YOUR")){
       if (USE_MOCK_WHEN_NO_API) return mockApi(action, params);
       throw new Error("Chưa cấu hình API_BASE");
     }
@@ -237,21 +261,23 @@
       const rows = [
         {
           "Tags Products":"Lọc dầu Toyota",
-          "Category":"Động cơ",
-          "Sale Price":120000,
-          "Cost Price":80000,
-          "Stock":15,
-          "SKU":"TOY-OF-01",
-          "Images":"https://i.imgur.com/6XH9K0N.png"
+          "category":"Động cơ",
+          "sale_price":120000,
+          "cost_price":80000,
+          "stock":15,
+          "code_type":"SKU",
+          "code_main":"TOY-OF-01",
+          "image_urls":"https://i.imgur.com/6XH9K0N.png"
         },
         {
-          "Products":"Bugi Denso",
-          "Category":"Điện",
-          "Price":95000,
-          "Cost":60000,
-          "Qty":32,
-          "Code":"DNS-BG-02",
-          "Image_urls":"https://i.imgur.com/2yaf2wb.png"
+          "Tags Products":"Bugi Denso",
+          "category":"Điện",
+          "sale_price":95000,
+          "cost_price":60000,
+          "stock":32,
+          "code_type":"SKU",
+          "code_main":"DNS-BG-02",
+          "image_urls":"https://i.imgur.com/2yaf2wb.png"
         }
       ];
 
@@ -261,7 +287,7 @@
       const filtered = rows.filter(r=>{
         const p = normKeyObj(r);
         const name = pick(p,"tags products","products","name");
-        const code = pick(p,"sku","code","oem");
+        const code = pick(p,"code_main","sku","code","oem");
         const c = pick(p,"category");
         const okQ = !q || (String(name).toLowerCase().includes(q) || String(code).toLowerCase().includes(q));
         const okC = !cat || String(c).toLowerCase() === cat;
@@ -286,7 +312,6 @@
     rows.forEach(raw=>{
       const p = normKeyObj(raw);
 
-      // ƯU TIÊN "tags products" (đúng key bạn muốn)
       const name = pick(p, "tags products", "products", "name", "tên", "ten") || "—";
       const category = pick(p, "category", "nhóm hàng", "group");
       const brand_model = pick(p, "brand_model", "brand model", "model", "hãng xe", "hang xe");
@@ -351,7 +376,7 @@
       const cats = init.categories || [];
       $('category').innerHTML =
         `<option value="">Tất cả</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-      $('dbg').textContent = API_BASE ? "API: OK" : "API: đang dùng MOCK (chưa cấu hình API_BASE)";
+      $('dbg').textContent = (API_BASE && !API_BASE.includes("PASTE_YOUR")) ? "API: OK" : "API: đang dùng MOCK (chưa cấu hình API_BASE)";
       await load();
     }catch(err){
       $('dbg').textContent = "Lỗi init: " + err.message;
